@@ -5,7 +5,7 @@ import { Link, Redirect } from "expo-router";
 import { View, Button } from "react-native";
 
 const profileScreen = () => {
-    const { session, loading, isAdmin } = useAuth();
+    const { session, loading } = useAuth();
 
     if (loading) {
         return <Spinner />;
@@ -17,23 +17,21 @@ const profileScreen = () => {
 
     return (
         <View style={{ flex: 1, justifyContent: "center", padding: 10 }}>
-            {isAdmin && (
-                <Link
-                    style={{
-                        backgroundColor: "green",
-                        padding: 15,
-                        alignItems: "center",
-                        borderRadius: 100,
-                        marginVertical: 10,
-                        fontSize: 16,
-                        fontWeight: "600",
-                        color: "white",
-                        textAlign: "center",
-                    }}
-                    href={"/"}>
-                    Dashboard
-                </Link>
-            )}
+            <Link
+                style={{
+                    backgroundColor: "green",
+                    padding: 15,
+                    alignItems: "center",
+                    borderRadius: 100,
+                    marginVertical: 10,
+                    fontSize: 16,
+                    fontWeight: "600",
+                    color: "white",
+                    textAlign: "center",
+                }}
+                href={"/"}>
+                Dashboard
+            </Link>
             <Button
                 onPress={async () => await supabase.auth.signOut()}
                 title="Sign out"

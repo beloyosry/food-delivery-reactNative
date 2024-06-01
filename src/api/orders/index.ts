@@ -2,6 +2,10 @@ import { UpdateTables, InsertTables } from "@/types";
 import { supabase } from "@/lib/supabase";
 import { useAuth } from "@/providers/AuthProvider";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import {
+    notifyAdminAboutNewOrder,
+    notifyUserAboutOrderUpdate,
+} from "@/lib/notifications";
 
 export const useAdminOrderList = ({ archived = false }) => {
     const statuses = archived

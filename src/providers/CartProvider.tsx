@@ -4,6 +4,8 @@ import { randomUUID } from "expo-crypto";
 import { useInsertOrder } from "@/api/orders";
 import { useRouter } from "expo-router";
 import { useInsertOrderItems } from "@/api/order-items";
+import { initializePaymentSheet, openPaymentSheet } from "@/lib/stripe";
+import { notifyAdminAboutNewOrder } from "@/lib/notifications";
 
 type Product = Tables<"products">;
 type CartType = {
@@ -71,7 +73,15 @@ const CartProvider = ({ children }: PropsWithChildren) => {
         setItems([]);
     };
 
-    const checkOut = () => {
+    const checkOut = async () => {
+        // await initializePaymentSheet(Math.floor(total * 100));
+
+        // const payed = await openPaymentSheet();
+
+        // if (!payed) {
+        //     return;
+        // }
+
         insertOrder(
             { total },
             {
@@ -80,7 +90,7 @@ const CartProvider = ({ children }: PropsWithChildren) => {
         );
     };
 
-    const saveOrderItems = (order: Tables<"orders">) => {
+    const saveOrderItems = async (order: Tables<"orders">) => {
         const orderItems = items.map((cartItem) => ({
             order_id: order.id,
             product_id: cartItem.product_id,
@@ -93,6 +103,8 @@ const CartProvider = ({ children }: PropsWithChildren) => {
                 router.push(`/(user)/orders/${order.id}`);
             },
         });
+
+        await notifyAdminAboutNewOrder();
     };
 
     return (
